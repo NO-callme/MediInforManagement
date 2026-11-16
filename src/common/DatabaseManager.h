@@ -7,7 +7,6 @@
 #include <QString>
 #include <QMutex>
 
-#include <winsock2.h>
 #include <mysql.h>
 
 #include "DbResult.h"

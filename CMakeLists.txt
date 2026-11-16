@@ -8,6 +8,9 @@ project(MediInforManagement
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# 导出 compile_commands.json，供 IDE（IntelliSense/clangd）读取真实编译参数
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 # Qt 元对象/资源/UI 自动处理
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)

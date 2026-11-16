@@ -6,7 +6,6 @@
 
 #include <QString>
 
-#include <winsock2.h>
 #include <mysql.h>
 
 // RAII 封装 MYSQL_RES，负责自动释放结果集
