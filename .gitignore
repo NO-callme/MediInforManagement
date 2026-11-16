@@ -1,0 +1,13 @@
+# 构建产物
+/build/
+build*/
+
+# Qt Creator / IDE
+CMakeLists.txt.user*
+*.user
+.qtc_clangd/
+.cache/
+
+# 系统
+.DS_Store
+Thumbs.db
