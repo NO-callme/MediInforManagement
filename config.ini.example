@@ -1,0 +1,8 @@
+; 复制本文件为 config.ini 并填入真实连接信息
+; config.ini 已被 .gitignore 忽略，不会提交到仓库
+[Database]
+host=localhost
+port=3306
+database=medical_engineering
+username=root
+password=your_password_here

@@ -11,3 +11,6 @@ CMakeLists.txt.user*
 # 系统
 .DS_Store
 Thumbs.db
+
+# 本地配置（含数据库密码，不提交）
+config.ini

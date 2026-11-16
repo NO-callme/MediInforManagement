@@ -13,18 +13,43 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
-# 当前仅 P0：Widgets。后续按模块增量引入（Sql、Charts 等）。
 find_package(Qt6 REQUIRED COMPONENTS Widgets)
 
-set(PROJECT_SOURCES
+# ---- MySQL（libmysql C API）----
+# 头文件目录（MySQL Server 安装自带）
+set(MYSQL_INCLUDE_DIR "C:/Program Files/MySQL/MySQL Server 8.0/include" CACHE PATH "MySQL include 目录")
+# MinGW 导入库目录（由 libmysql.dll 经 gendef+dlltool 生成，见 third_party/mysql/README）
+set(MYSQL_LIB_DIR "${CMAKE_CURRENT_SOURCE_DIR}/third_party/mysql/lib" CACHE PATH "MinGW 导入库目录")
+
+# ---- 核心静态库：model + dao + common（后续加入 service 层）----
+add_library(mes_core STATIC
+    src/common/DatabaseManager.h
+    src/common/DatabaseManager.cpp
+    src/common/DbResult.h
+    src/common/DbResult.cpp
+    src/model/User.h
+    src/dao/UserDao.h
+    src/dao/UserDao.cpp
+)
+
+target_include_directories(mes_core PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/src
+    ${MYSQL_INCLUDE_DIR}
+)
+target_link_directories(mes_core PUBLIC ${MYSQL_LIB_DIR})
+target_link_libraries(mes_core PUBLIC Qt6::Core mysql)
+
+# ---- 主程序（GUI）----
+add_executable(${PROJECT_NAME} WIN32
     src/main.cpp
     src/ui/MainWindow.cpp
     src/ui/MainWindow.h
 )
-
-add_executable(${PROJECT_NAME} WIN32 ${PROJECT_SOURCES})
-
-# 统一以 src/ 为包含根，业务代码可写 #include "ui/..." / "dao/..." 等
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
+target_link_libraries(${PROJECT_NAME} PRIVATE mes_core Qt6::Widgets)
 
-target_link_libraries(${PROJECT_NAME} PRIVATE Qt6::Widgets)
+# ---- DB 自测程序（控制台，验证数据层 CRUD）----
+add_executable(db_selftest
+    tests/db_selftest.cpp
+)
+target_link_libraries(db_selftest PRIVATE mes_core Qt6::Core)

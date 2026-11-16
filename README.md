@@ -48,7 +48,7 @@ tests/        # 单元/集成测试
 ## 开发进度
 
 - [x] P0 环境准备 + 工程骨架（可编译运行的空白主窗口）
-- [ ] P1 数据层
+- [x] P1 数据层（建表脚本 + DatabaseManager + UserDao，libmysql C API，CRUD 自测通过）
 - [ ] P2 病例与导入
 - [ ] P3 项目管理
 - [ ] P4 可视化
