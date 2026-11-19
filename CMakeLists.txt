@@ -62,6 +62,14 @@ add_executable(${PROJECT_NAME} WIN32
     src/main.cpp
     src/ui/MainWindow.cpp
     src/ui/MainWindow.h
+    src/ui/CaseManagementWidget.cpp
+    src/ui/CaseManagementWidget.h
+    src/ui/PatientCaseTableModel.cpp
+    src/ui/PatientCaseTableModel.h
+    src/ui/CaseEditDialog.cpp
+    src/ui/CaseEditDialog.h
+    src/ui/ImportDialog.cpp
+    src/ui/ImportDialog.h
 )
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
 target_link_libraries(${PROJECT_NAME} PRIVATE mes_core Qt6::Widgets)

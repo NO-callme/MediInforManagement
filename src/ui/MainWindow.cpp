@@ -1,13 +1,39 @@
 // ============================================================================
-// 文件功能：主窗口类 MainWindow 的实现。当前为空白窗口，仅设置标题与初始尺寸。
+// 文件功能：主窗口实现。构建左侧导航与右侧页面堆叠，建立导航切换。
 // ============================================================================
 #include "MainWindow.h"
+
+#include <QHBoxLayout>
+#include <QListWidget>
+#include <QStackedWidget>
+
+#include "CaseManagementWidget.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
     setWindowTitle(tr("医疗工程信息管理系统"));
     resize(1200, 800);
+
+    navList_ = new QListWidget(this);
+    navList_->setFixedWidth(160);
+    navList_->addItem(tr("病例管理"));
+    // 后续阶段（P3+）在此追加：项目管理 / 进度跟踪 / 设备测试 / 数据报表 / 图像识别 / 系统设置
+
+    stack_ = new QStackedWidget(this);
+    casePage_ = new CaseManagementWidget(this);
+    stack_->addWidget(casePage_);
+
+    auto *central = new QWidget(this);
+    auto *layout = new QHBoxLayout(central);
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->setSpacing(0);
+    layout->addWidget(navList_);
+    layout->addWidget(stack_, 1);
+    setCentralWidget(central);
+
+    connect(navList_, &QListWidget::currentRowChanged, stack_, &QStackedWidget::setCurrentIndex);
+    navList_->setCurrentRow(0);
 }
 
 MainWindow::~MainWindow() = default;

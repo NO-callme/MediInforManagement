@@ -49,7 +49,7 @@ tests/        # 单元/集成测试
 
 - [x] P0 环境准备 + 工程骨架（可编译运行的空白主窗口）
 - [x] P1 数据层（建表脚本 + DatabaseManager + UserDao，libmysql C API，CRUD 自测通过）
-- [ ] P2 病例与导入
+- [x] P2 病例与导入（QXlsx 内嵌 + 病例管理页 + Excel 导入，20 条示例数据验证通过）
 - [ ] P3 项目管理
 - [ ] P4 可视化
 - [ ] P5 图像识别
