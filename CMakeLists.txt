@@ -36,8 +36,18 @@ add_library(mes_core STATIC
     src/common/DbResult.h
     src/common/DbResult.cpp
     src/model/User.h
+    src/model/PatientCase.h
+    src/model/ImportRecord.h
     src/dao/UserDao.h
     src/dao/UserDao.cpp
+    src/dao/PatientCaseDao.h
+    src/dao/PatientCaseDao.cpp
+    src/dao/ImportRecordDao.h
+    src/dao/ImportRecordDao.cpp
+    src/excel/ExcelCaseParser.h
+    src/excel/ExcelCaseParser.cpp
+    src/service/CaseImportService.h
+    src/service/CaseImportService.cpp
 )
 
 target_include_directories(mes_core PUBLIC
@@ -61,3 +71,15 @@ add_executable(db_selftest
     tests/db_selftest.cpp
 )
 target_link_libraries(db_selftest PRIVATE mes_core Qt6::Core)
+
+# ---- 示例数据生成工具（控制台，用 QXlsx 写示例 .xlsx）----
+add_executable(gen_sample_xlsx
+    tests/gen_sample_xlsx.cpp
+)
+target_link_libraries(gen_sample_xlsx PRIVATE mes_core Qt6::Core)
+
+# ---- 导入自测程序（控制台，验证 Excel 导入全链路）----
+add_executable(import_selftest
+    tests/import_selftest.cpp
+)
+target_link_libraries(import_selftest PRIVATE mes_core Qt6::Core)

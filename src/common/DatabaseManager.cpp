@@ -115,6 +115,30 @@ bool DatabaseManager::execute(const QString &sql, quint64 *affectedRows, QString
     return true;
 }
 
+bool DatabaseManager::beginTransaction()
+{
+    QMutexLocker locker(&mutex_);
+    if (!conn_)
+        return false;
+    return mysql_query(conn_, "START TRANSACTION") == 0;
+}
+
+bool DatabaseManager::commit()
+{
+    QMutexLocker locker(&mutex_);
+    if (!conn_)
+        return false;
+    return mysql_query(conn_, "COMMIT") == 0;
+}
+
+bool DatabaseManager::rollback()
+{
+    QMutexLocker locker(&mutex_);
+    if (!conn_)
+        return false;
+    return mysql_query(conn_, "ROLLBACK") == 0;
+}
+
 DbResult DatabaseManager::query(const QString &sql, QString *error)
 {
     QMutexLocker locker(&mutex_);

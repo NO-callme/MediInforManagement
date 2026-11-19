@@ -32,6 +32,11 @@ public:
     // SELECT 查询，返回可迭代结果集（无效表示出错）
     DbResult query(const QString &sql, QString *error = nullptr);
 
+    // 事务（批量导入时保证原子性）
+    bool beginTransaction();
+    bool commit();
+    bool rollback();
+
     QString escape(const QString &value) const;   // 防 SQL 注入转义
     quint64 lastInsertId() const;
     QString lastError() const;
