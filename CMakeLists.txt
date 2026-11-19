@@ -18,6 +18,11 @@ set(CMAKE_AUTOUIC ON)
 
 find_package(Qt6 REQUIRED COMPONENTS Widgets)
 
+# ---- QXlsx（Excel 读写，源码内嵌）----
+# QXlsx 用到 Qt 的 GuiPrivate 私有头，抑制 Qt 的私有模块警告
+set(QT_NO_PRIVATE_MODULE_WARNING ON)
+add_subdirectory(third_party/qxlsx/QXlsx)
+
 # ---- MySQL（libmysql C API）----
 # 头文件目录（MySQL Server 安装自带）
 set(MYSQL_INCLUDE_DIR "C:/Program Files/MySQL/MySQL Server 8.0/include" CACHE PATH "MySQL include 目录")
@@ -40,7 +45,7 @@ target_include_directories(mes_core PUBLIC
     ${MYSQL_INCLUDE_DIR}
 )
 target_link_directories(mes_core PUBLIC ${MYSQL_LIB_DIR})
-target_link_libraries(mes_core PUBLIC Qt6::Core mysql)
+target_link_libraries(mes_core PUBLIC Qt6::Core mysql QXlsx::QXlsx)
 
 # ---- 主程序（GUI）----
 add_executable(${PROJECT_NAME} WIN32
