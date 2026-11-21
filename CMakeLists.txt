@@ -38,12 +38,24 @@ add_library(mes_core STATIC
     src/model/User.h
     src/model/PatientCase.h
     src/model/ImportRecord.h
+    src/model/Project.h
+    src/model/Milestone.h
+    src/model/ProjectMember.h
+    src/model/EquipmentTest.h
     src/dao/UserDao.h
     src/dao/UserDao.cpp
     src/dao/PatientCaseDao.h
     src/dao/PatientCaseDao.cpp
     src/dao/ImportRecordDao.h
     src/dao/ImportRecordDao.cpp
+    src/dao/ProjectDao.h
+    src/dao/ProjectDao.cpp
+    src/dao/MilestoneDao.h
+    src/dao/MilestoneDao.cpp
+    src/dao/ProjectMemberDao.h
+    src/dao/ProjectMemberDao.cpp
+    src/dao/EquipmentTestDao.h
+    src/dao/EquipmentTestDao.cpp
     src/excel/ExcelCaseParser.h
     src/excel/ExcelCaseParser.cpp
     src/service/CaseImportService.h
@@ -70,6 +82,20 @@ add_executable(${PROJECT_NAME} WIN32
     src/ui/CaseEditDialog.h
     src/ui/ImportDialog.cpp
     src/ui/ImportDialog.h
+    src/ui/ProjectTableModel.cpp
+    src/ui/ProjectTableModel.h
+    src/ui/ProjectEditDialog.cpp
+    src/ui/ProjectEditDialog.h
+    src/ui/ProjectManagementWidget.cpp
+    src/ui/ProjectManagementWidget.h
+    src/ui/ProjectDetailDialog.cpp
+    src/ui/ProjectDetailDialog.h
+    src/ui/MilestoneEditDialog.cpp
+    src/ui/MilestoneEditDialog.h
+    src/ui/MemberEditDialog.cpp
+    src/ui/MemberEditDialog.h
+    src/ui/EquipmentTestEditDialog.cpp
+    src/ui/EquipmentTestEditDialog.h
 )
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
 target_link_libraries(${PROJECT_NAME} PRIVATE mes_core Qt6::Widgets)

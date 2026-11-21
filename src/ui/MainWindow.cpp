@@ -8,6 +8,7 @@
 #include <QStackedWidget>
 
 #include "CaseManagementWidget.h"
+#include "ProjectManagementWidget.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -18,11 +19,15 @@ MainWindow::MainWindow(QWidget *parent)
     navList_ = new QListWidget(this);
     navList_->setFixedWidth(160);
     navList_->addItem(tr("病例管理"));
-    // 后续阶段（P3+）在此追加：项目管理 / 进度跟踪 / 设备测试 / 数据报表 / 图像识别 / 系统设置
+    navList_->addItem(tr("项目管理"));
+    // 后续阶段（P4+）在此追加：进度跟踪 / 设备测试 / 数据报表 / 图像识别 / 系统设置
 
     stack_ = new QStackedWidget(this);
     casePage_ = new CaseManagementWidget(this);
     stack_->addWidget(casePage_);
+
+    projectPage_ = new ProjectManagementWidget(this);
+    stack_->addWidget(projectPage_);
 
     auto *central = new QWidget(this);
     auto *layout = new QHBoxLayout(central);

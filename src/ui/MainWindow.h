@@ -9,6 +9,7 @@
 class QListWidget;
 class QStackedWidget;
 class CaseManagementWidget;
+class ProjectManagementWidget;
 
 class MainWindow : public QMainWindow
 {
@@ -22,4 +23,5 @@ private:
     QListWidget *navList_;
     QStackedWidget *stack_;
     CaseManagementWidget *casePage_;
+    ProjectManagementWidget *projectPage_;
 };
