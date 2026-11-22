@@ -6,3 +6,7 @@ port=3306
 database=medical_engineering
 username=root
 password=your_password_here
+
+[ocr]
+; OCR 引擎：mock=模拟（默认，无需账号）；未来可接入 baidu/tencent 等云端实现
+engine=mock

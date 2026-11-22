@@ -58,6 +58,14 @@ add_library(mes_core STATIC
     src/dao/EquipmentTestDao.cpp
     src/dao/ReportDao.h
     src/dao/ReportDao.cpp
+    src/model/OcrRecord.h
+    src/dao/OcrRecordDao.h
+    src/dao/OcrRecordDao.cpp
+    src/ocr/OcrEngine.h
+    src/ocr/MockOcrEngine.h
+    src/ocr/MockOcrEngine.cpp
+    src/ocr/OcrEngineFactory.h
+    src/ocr/OcrEngineFactory.cpp
     src/excel/ExcelCaseParser.h
     src/excel/ExcelCaseParser.cpp
     src/service/CaseImportService.h
@@ -100,9 +108,21 @@ add_executable(${PROJECT_NAME} WIN32
     src/ui/EquipmentTestEditDialog.h
     src/ui/ReportCenterWidget.cpp
     src/ui/ReportCenterWidget.h
+    src/ui/OcrRecognitionWidget.cpp
+    src/ui/OcrRecognitionWidget.h
 )
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
 target_link_libraries(${PROJECT_NAME} PRIVATE mes_core Qt6::Widgets Qt6::Charts)
+
+# 构建后自动复制运行所需文件到可执行文件目录，免去手动配置 PATH
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        "C:/Program Files/MySQL/MySQL Server 8.0/lib/libmysql.dll"
+        $<TARGET_FILE_DIR:${PROJECT_NAME}>)
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        "${CMAKE_CURRENT_SOURCE_DIR}/config.ini"
+        $<TARGET_FILE_DIR:${PROJECT_NAME}>)
 
 # ---- DB 自测程序（控制台，验证数据层 CRUD）----
 add_executable(db_selftest
@@ -121,3 +141,9 @@ add_executable(import_selftest
     tests/import_selftest.cpp
 )
 target_link_libraries(import_selftest PRIVATE mes_core Qt6::Core)
+
+# ---- 示例图片生成工具（控制台，生成识别演示图片）----
+add_executable(gen_sample_images
+    tests/gen_sample_images.cpp
+)
+target_link_libraries(gen_sample_images PRIVATE Qt6::Gui)

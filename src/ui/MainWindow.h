@@ -11,6 +11,7 @@ class QStackedWidget;
 class CaseManagementWidget;
 class ProjectManagementWidget;
 class ReportCenterWidget;
+class OcrRecognitionWidget;
 
 class MainWindow : public QMainWindow
 {
@@ -26,4 +27,5 @@ private:
     CaseManagementWidget *casePage_;
     ProjectManagementWidget *projectPage_;
     ReportCenterWidget *reportPage_;
+    OcrRecognitionWidget *ocrPage_;
 };

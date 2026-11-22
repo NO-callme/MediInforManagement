@@ -8,6 +8,7 @@
 #include <QStackedWidget>
 
 #include "CaseManagementWidget.h"
+#include "OcrRecognitionWidget.h"
 #include "ProjectManagementWidget.h"
 #include "ReportCenterWidget.h"
 
@@ -22,7 +23,8 @@ MainWindow::MainWindow(QWidget *parent)
     navList_->addItem(tr("病例管理"));
     navList_->addItem(tr("项目管理"));
     navList_->addItem(tr("数据报表"));
-    // 后续阶段（P5+）在此追加：进度跟踪 / 设备测试 / 图像识别 / 系统设置
+    navList_->addItem(tr("图像识别"));
+    // 后续阶段（P6+）在此追加：系统设置等
 
     stack_ = new QStackedWidget(this);
     casePage_ = new CaseManagementWidget(this);
@@ -33,6 +35,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     reportPage_ = new ReportCenterWidget(this);
     stack_->addWidget(reportPage_);
+
+    ocrPage_ = new OcrRecognitionWidget(this);
+    stack_->addWidget(ocrPage_);
 
     auto *central = new QWidget(this);
     auto *layout = new QHBoxLayout(central);
