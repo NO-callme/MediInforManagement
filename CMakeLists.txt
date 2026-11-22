@@ -16,7 +16,7 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
-find_package(Qt6 REQUIRED COMPONENTS Widgets)
+find_package(Qt6 REQUIRED COMPONENTS Widgets Charts)
 
 # ---- QXlsx（Excel 读写，源码内嵌）----
 # QXlsx 用到 Qt 的 GuiPrivate 私有头，抑制 Qt 的私有模块警告
@@ -56,6 +56,8 @@ add_library(mes_core STATIC
     src/dao/ProjectMemberDao.cpp
     src/dao/EquipmentTestDao.h
     src/dao/EquipmentTestDao.cpp
+    src/dao/ReportDao.h
+    src/dao/ReportDao.cpp
     src/excel/ExcelCaseParser.h
     src/excel/ExcelCaseParser.cpp
     src/service/CaseImportService.h
@@ -96,9 +98,11 @@ add_executable(${PROJECT_NAME} WIN32
     src/ui/MemberEditDialog.h
     src/ui/EquipmentTestEditDialog.cpp
     src/ui/EquipmentTestEditDialog.h
+    src/ui/ReportCenterWidget.cpp
+    src/ui/ReportCenterWidget.h
 )
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
-target_link_libraries(${PROJECT_NAME} PRIVATE mes_core Qt6::Widgets)
+target_link_libraries(${PROJECT_NAME} PRIVATE mes_core Qt6::Widgets Qt6::Charts)
 
 # ---- DB 自测程序（控制台，验证数据层 CRUD）----
 add_executable(db_selftest
