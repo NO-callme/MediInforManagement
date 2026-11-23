@@ -5,6 +5,8 @@
 #include "CaseImportService.h"
 
 #include <QFileInfo>
+#include <QSet>
+#include <QStringList>
 
 #include "common/DatabaseManager.h"
 #include "dao/ImportRecordDao.h"
@@ -28,17 +30,32 @@ CaseImportService::ImportSummary CaseImportService::importFile(const QString &fi
     // 分类：校验通过且病例号不重复 -> 待插入；否则计为失败
     PatientCaseDao caseDao;
     QVector<PatientCase> toInsert;
+
+    // 先收集校验通过的行，再一次性批量查重（避免逐行查询）
+    QVector<PatientCase> validRows;
+    QStringList caseNos;
     for (const ParsedCaseRow &row : parsed.rows) {
         if (!row.error.isEmpty()) {
             ++summary.failed;
             continue;
         }
-        QString err;
-        if (caseDao.countByCaseNo(row.data.caseNo, &err) > 0) {
+        validRows.append(row.data);
+        caseNos << row.data.caseNo;
+    }
+
+    QString dupErr;
+    const QSet<QString> existing = caseDao.findExistingCaseNos(caseNos, &dupErr);
+    if (!dupErr.isEmpty()) {
+        if (error)
+            *error = dupErr;
+        return summary;
+    }
+    for (const PatientCase &c : validRows) {
+        if (existing.contains(c.caseNo)) {
             ++summary.failed; // 病例号已存在
             continue;
         }
-        toInsert.append(row.data);
+        toInsert.append(c);
     }
 
     DatabaseManager &db = DatabaseManager::instance();

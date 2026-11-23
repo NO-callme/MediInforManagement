@@ -16,7 +16,7 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
-find_package(Qt6 REQUIRED COMPONENTS Widgets Charts)
+find_package(Qt6 REQUIRED COMPONENTS Widgets Charts Test)
 
 # ---- QXlsx（Excel 读写，源码内嵌）----
 # QXlsx 用到 Qt 的 GuiPrivate 私有头，抑制 Qt 的私有模块警告
@@ -148,3 +148,18 @@ add_executable(gen_sample_images
     tests/gen_sample_images.cpp
 )
 target_link_libraries(gen_sample_images PRIVATE Qt6::Gui)
+
+# ---- 单元/集成测试（Qt Test）----
+enable_testing()
+
+add_executable(tst_excelparser tests/tst_excelparser.cpp)
+target_link_libraries(tst_excelparser PRIVATE mes_core Qt6::Test)
+add_test(NAME tst_excelparser COMMAND tst_excelparser)
+
+add_executable(tst_ocr tests/tst_ocr.cpp)
+target_link_libraries(tst_ocr PRIVATE mes_core Qt6::Test)
+add_test(NAME tst_ocr COMMAND tst_ocr)
+
+add_executable(tst_dao tests/tst_dao.cpp)
+target_link_libraries(tst_dao PRIVATE mes_core Qt6::Test)
+add_test(NAME tst_dao COMMAND tst_dao)

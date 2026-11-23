@@ -174,3 +174,27 @@ int PatientCaseDao::countByCaseNo(const QString &caseNo, QString *error)
         return -1;
     return rs.value(0).toInt();
 }
+
+QSet<QString> PatientCaseDao::findExistingCaseNos(const QStringList &caseNos, QString *error)
+{
+    QSet<QString> existing;
+    DatabaseManager &db = DatabaseManager::instance();
+
+    // 分批查询，避免 IN 列表过长
+    constexpr int kChunkSize = 500;
+    for (int i = 0; i < caseNos.size(); i += kChunkSize) {
+        QStringList quoted;
+        const int end = qMin(i + kChunkSize, caseNos.size());
+        for (int j = i; j < end; ++j)
+            quoted << QStringLiteral("'%1'").arg(db.escape(caseNos.at(j)));
+
+        const QString sql = QStringLiteral("SELECT case_no FROM mes_patient_case WHERE case_no IN (%1)")
+                                .arg(quoted.join(QStringLiteral(",")));
+        DbResult rs = db.query(sql, error);
+        if (!rs.isValid())
+            return existing;
+        while (rs.next())
+            existing.insert(rs.value(0));
+    }
+    return existing;
+}

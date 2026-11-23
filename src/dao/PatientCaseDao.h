@@ -4,6 +4,7 @@
 // ============================================================================
 #pragma once
 
+#include <QSet>
 #include <QString>
 #include <QVector>
 
@@ -20,4 +21,6 @@ public:
     bool update(const PatientCase &c, QString *error = nullptr);
     bool remove(quint32 id, QString *error = nullptr);
     int countByCaseNo(const QString &caseNo, QString *error = nullptr); // 导入时查重
+    // 批量查重：一次查询返回这些病例号中已存在的集合（万级导入性能关键）
+    QSet<QString> findExistingCaseNos(const QStringList &caseNos, QString *error = nullptr);
 };
