@@ -109,6 +109,22 @@ CREATE TABLE IF NOT EXISTS mes_equipment_test (
     KEY idx_project (project_id)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT = '设备测试数据';
 
+-- 设备台账（二次开发新增）
+CREATE TABLE IF NOT EXISTS mes_equipment (
+    id            INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    equipment_no  VARCHAR(50)  NOT NULL COMMENT '设备编号',
+    name          VARCHAR(100) NOT NULL COMMENT '设备名称',
+    model         VARCHAR(100) DEFAULT NULL COMMENT '型号',
+    category      VARCHAR(50)  DEFAULT NULL COMMENT '分类',
+    status        VARCHAR(20)  NOT NULL DEFAULT '在用' COMMENT '在用/维修/报废',
+    purchase_date DATE         DEFAULT NULL COMMENT '采购日期',
+    department    VARCHAR(100) DEFAULT NULL COMMENT '所属科室',
+    remark        VARCHAR(500) DEFAULT NULL COMMENT '备注',
+    create_time   DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    UNIQUE KEY uk_equipment_no (equipment_no)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT = '设备台账';
+
 -- 图像识别记录与结果
 CREATE TABLE IF NOT EXISTS mes_ocr_record (
     id              INT UNSIGNED NOT NULL AUTO_INCREMENT,

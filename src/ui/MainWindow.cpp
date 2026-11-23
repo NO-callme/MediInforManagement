@@ -11,6 +11,7 @@
 #include <QTimer>
 
 #include "CaseManagementWidget.h"
+#include "EquipmentManagementWidget.h"
 #include "common/DatabaseManager.h"
 #include "OcrRecognitionWidget.h"
 #include "ProjectManagementWidget.h"
@@ -27,9 +28,9 @@ MainWindow::MainWindow(QWidget *parent)
     navList_->setFixedWidth(160);
     navList_->addItem(tr("病例管理"));
     navList_->addItem(tr("项目管理"));
+    navList_->addItem(tr("设备台账"));
     navList_->addItem(tr("数据报表"));
     navList_->addItem(tr("图像识别"));
-    // 后续阶段（P6+）在此追加：系统设置等
 
     stack_ = new QStackedWidget(this);
     casePage_ = new CaseManagementWidget(this);
@@ -37,6 +38,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     projectPage_ = new ProjectManagementWidget(this);
     stack_->addWidget(projectPage_);
+
+    equipmentPage_ = new EquipmentManagementWidget(this);
+    stack_->addWidget(equipmentPage_);
 
     reportPage_ = new ReportCenterWidget(this);
     stack_->addWidget(reportPage_);

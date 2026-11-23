@@ -19,6 +19,8 @@ public:
 
 private slots:
     void onExport();
+    void onExportCsv();
+    void onExportPdf();
 
 private:
     QChartView *deptView_;     // 病例按科室柱状图

@@ -59,8 +59,11 @@ add_library(mes_core STATIC
     src/dao/ReportDao.h
     src/dao/ReportDao.cpp
     src/model/OcrRecord.h
+    src/model/Equipment.h
     src/dao/OcrRecordDao.h
     src/dao/OcrRecordDao.cpp
+    src/dao/EquipmentDao.h
+    src/dao/EquipmentDao.cpp
     src/ocr/OcrEngine.h
     src/ocr/MockOcrEngine.h
     src/ocr/MockOcrEngine.cpp
@@ -111,6 +114,12 @@ add_executable(${PROJECT_NAME} WIN32
     src/ui/ReportCenterWidget.h
     src/ui/OcrRecognitionWidget.cpp
     src/ui/OcrRecognitionWidget.h
+    src/ui/EquipmentTableModel.cpp
+    src/ui/EquipmentTableModel.h
+    src/ui/EquipmentEditDialog.cpp
+    src/ui/EquipmentEditDialog.h
+    src/ui/EquipmentManagementWidget.cpp
+    src/ui/EquipmentManagementWidget.h
 )
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
 target_link_libraries(${PROJECT_NAME} PRIVATE mes_core Qt6::Widgets Qt6::Charts)

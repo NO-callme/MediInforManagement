@@ -13,11 +13,17 @@
 #include <QtCharts/QPieSeries>
 #include <QtCharts/QValueAxis>
 
+#include <QFile>
 #include <QFileDialog>
 #include <QGridLayout>
 #include <QHBoxLayout>
 #include <QMessageBox>
+#include <QPageSize>
+#include <QPainter>
+#include <QPdfWriter>
 #include <QPushButton>
+#include <QStringConverter>
+#include <QTextStream>
 
 #include "dao/ReportDao.h"
 
@@ -96,12 +102,18 @@ ReportCenterWidget::ReportCenterWidget(QWidget *parent)
 {
     auto *refreshBtn = new QPushButton(tr("刷新"), this);
     auto *exportBtn = new QPushButton(tr("导出图片"), this);
+    auto *csvBtn = new QPushButton(tr("导出 CSV"), this);
+    auto *pdfBtn = new QPushButton(tr("导出 PDF"), this);
     connect(refreshBtn, &QPushButton::clicked, this, &ReportCenterWidget::refresh);
     connect(exportBtn, &QPushButton::clicked, this, &ReportCenterWidget::onExport);
+    connect(csvBtn, &QPushButton::clicked, this, &ReportCenterWidget::onExportCsv);
+    connect(pdfBtn, &QPushButton::clicked, this, &ReportCenterWidget::onExportPdf);
 
     auto *toolbar = new QHBoxLayout;
     toolbar->addWidget(refreshBtn);
     toolbar->addWidget(exportBtn);
+    toolbar->addWidget(csvBtn);
+    toolbar->addWidget(pdfBtn);
     toolbar->addStretch();
 
     deptView_ = new QChartView(this);
@@ -156,4 +168,75 @@ void ReportCenterWidget::onExport()
             ++ok;
     }
     QMessageBox::information(this, tr("导出完成"), tr("已导出 %1 张图片到：\n%2").arg(ok).arg(dir));
+}
+
+void ReportCenterWidget::onExportCsv()
+{
+    const QString path = QFileDialog::getSaveFileName(this, tr("导出 CSV"),
+                                                      QStringLiteral("统计报表.csv"), tr("CSV 文件 (*.csv)"));
+    if (path.isEmpty())
+        return;
+
+    ReportDao dao;
+    QString err;
+    const QVector<StatItem> dept = dao.patientCasesByDepartment(&err);
+    const QVector<StatItem> month = dao.patientCasesByMonth(&err);
+    const QVector<StatItem> status = dao.projectStatusDistribution(&err);
+    const QVector<StatItem> rate = dao.testPassRateByMonth(&err);
+
+    QFile file(path);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        QMessageBox::critical(this, tr("失败"), tr("无法写入文件：%1").arg(path));
+        return;
+    }
+    QTextStream out(&file);
+    out.setEncoding(QStringConverter::Utf8);
+    out.setGenerateByteOrderMark(true); // 带 BOM，Excel 打开中文不乱码
+
+    auto writeSection = [&out](const QString &title, const QVector<StatItem> &items) {
+        out << title << "\n标签,数值\n";
+        for (const StatItem &it : items)
+            out << '"' << it.label << "\"," << it.value << "\n";
+        out << "\n";
+    };
+    writeSection(QStringLiteral("病例按科室"), dept);
+    writeSection(QStringLiteral("病例按月份"), month);
+    writeSection(QStringLiteral("项目状态分布"), status);
+    writeSection(QStringLiteral("测试通过率(%)"), rate);
+
+    QMessageBox::information(this, tr("完成"), tr("CSV 已导出到：\n%1").arg(path));
+}
+
+void ReportCenterWidget::onExportPdf()
+{
+    const QString path = QFileDialog::getSaveFileName(this, tr("导出 PDF"),
+                                                      QStringLiteral("统计报表.pdf"), tr("PDF 文件 (*.pdf)"));
+    if (path.isEmpty())
+        return;
+
+    QPdfWriter writer(path);
+    writer.setPageSize(QPageSize(QPageSize::A4));
+    writer.setResolution(96);
+
+    QPainter painter(&writer);
+    QFont titleFont = painter.font();
+    titleFont.setPointSize(16);
+    titleFont.setBold(true);
+    painter.setFont(titleFont);
+    painter.drawText(QRect(0, 0, writer.width(), 120), Qt::AlignCenter,
+                     tr("医疗工程信息管理系统 - 统计报表"));
+
+    const QList<QChartView *> views = {deptView_, monthView_, statusView_, passRateView_};
+    for (int i = 0; i < views.size(); ++i) {
+        if (i > 0)
+            writer.newPage();
+        const QPixmap pm = views.at(i)->grab();
+        const int margin = 40;
+        const int w = writer.width() - 2 * margin;
+        const int h = w * pm.height() / qMax(1, pm.width());
+        painter.drawPixmap(margin, margin + 60, w, h, pm);
+    }
+    painter.end();
+
+    QMessageBox::information(this, tr("完成"), tr("PDF 已导出到：\n%1").arg(path));
 }

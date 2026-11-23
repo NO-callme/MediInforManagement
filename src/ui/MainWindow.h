@@ -11,6 +11,7 @@ class QListWidget;
 class QStackedWidget;
 class QTimer;
 class CaseManagementWidget;
+class EquipmentManagementWidget;
 class ProjectManagementWidget;
 class ReportCenterWidget;
 class OcrRecognitionWidget;
@@ -31,6 +32,7 @@ private:
     QStackedWidget *stack_;
     CaseManagementWidget *casePage_;
     ProjectManagementWidget *projectPage_;
+    EquipmentManagementWidget *equipmentPage_;
     ReportCenterWidget *reportPage_;
     OcrRecognitionWidget *ocrPage_;
 
