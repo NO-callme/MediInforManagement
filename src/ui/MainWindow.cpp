@@ -4,10 +4,14 @@
 #include "MainWindow.h"
 
 #include <QHBoxLayout>
+#include <QLabel>
 #include <QListWidget>
 #include <QStackedWidget>
+#include <QStatusBar>
+#include <QTimer>
 
 #include "CaseManagementWidget.h"
+#include "common/DatabaseManager.h"
 #include "OcrRecognitionWidget.h"
 #include "ProjectManagementWidget.h"
 #include "ReportCenterWidget.h"
@@ -19,6 +23,7 @@ MainWindow::MainWindow(QWidget *parent)
     resize(1200, 800);
 
     navList_ = new QListWidget(this);
+    navList_->setObjectName(QStringLiteral("navList"));
     navList_->setFixedWidth(160);
     navList_->addItem(tr("病例管理"));
     navList_->addItem(tr("项目管理"));
@@ -49,6 +54,21 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(navList_, &QListWidget::currentRowChanged, stack_, &QStackedWidget::setCurrentIndex);
     navList_->setCurrentRow(0);
+
+    // 状态栏：显示数据库连接状态，定时自动重连
+    dbStatusLabel_ = new QLabel(this);
+    statusBar()->addWidget(dbStatusLabel_);
+    reconnectTimer_ = new QTimer(this);
+    reconnectTimer_->setInterval(10000); // 每 10 秒检查一次
+    connect(reconnectTimer_, &QTimer::timeout, this, &MainWindow::updateDbStatus);
+    reconnectTimer_->start();
+    updateDbStatus();
 }
 
 MainWindow::~MainWindow() = default;
+
+void MainWindow::updateDbStatus()
+{
+    const bool ok = DatabaseManager::instance().ensureConnected();
+    dbStatusLabel_->setText(ok ? tr("数据库：已连接") : tr("数据库：未连接"));
+}

@@ -82,6 +82,7 @@ target_link_libraries(mes_core PUBLIC Qt6::Core mysql QXlsx::QXlsx)
 # ---- 主程序（GUI）----
 add_executable(${PROJECT_NAME} WIN32
     src/main.cpp
+    resources.qrc
     src/ui/MainWindow.cpp
     src/ui/MainWindow.h
     src/ui/CaseManagementWidget.cpp

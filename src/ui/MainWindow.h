@@ -6,8 +6,10 @@
 
 #include <QMainWindow>
 
+class QLabel;
 class QListWidget;
 class QStackedWidget;
+class QTimer;
 class CaseManagementWidget;
 class ProjectManagementWidget;
 class ReportCenterWidget;
@@ -21,6 +23,9 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow() override;
 
+private slots:
+    void updateDbStatus(); // 检查并重连数据库，更新状态栏
+
 private:
     QListWidget *navList_;
     QStackedWidget *stack_;
@@ -28,4 +33,7 @@ private:
     ProjectManagementWidget *projectPage_;
     ReportCenterWidget *reportPage_;
     OcrRecognitionWidget *ocrPage_;
+
+    QLabel *dbStatusLabel_;
+    QTimer *reconnectTimer_;
 };

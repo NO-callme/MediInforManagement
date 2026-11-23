@@ -53,6 +53,9 @@ bool DatabaseManager::connect(QString *error)
 
     // 统一使用 utf8mb4，避免中文乱码
     mysql_options(conn_, MYSQL_SET_CHARSET_NAME, "utf8mb4");
+    // 设置连接超时（秒），避免断线重连时长时间阻塞界面
+    unsigned int connectTimeout = 3;
+    mysql_options(conn_, MYSQL_OPT_CONNECT_TIMEOUT, &connectTimeout);
 
     const QByteArray host = host_.toUtf8();
     const QByteArray user = username_.toUtf8();

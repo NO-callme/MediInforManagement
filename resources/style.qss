@@ -1,0 +1,102 @@
+/* ============================================================
+   医疗工程信息管理系统 全局样式表
+   ============================================================ */
+
+/* 全局字体 */
+QWidget {
+    font-family: "Microsoft YaHei", "PingFang SC", "SimHei", sans-serif;
+    font-size: 13px;
+}
+
+QMainWindow, QWidget#central {
+    background: #f4f6f8;
+}
+
+/* 左侧导航 */
+QListWidget#navList {
+    background: #2c3e50;
+    color: #ecf0f1;
+    border: none;
+    font-size: 15px;
+    outline: none;
+}
+QListWidget#navList::item {
+    height: 44px;
+    padding-left: 18px;
+}
+QListWidget#navList::item:hover {
+    background: #34495e;
+}
+QListWidget#navList::item:selected {
+    background: #3498db;
+    color: #ffffff;
+}
+
+/* 按钮 */
+QPushButton {
+    background: #3498db;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    padding: 6px 14px;
+}
+QPushButton:hover {
+    background: #2980b9;
+}
+QPushButton:pressed {
+    background: #1f6fa0;
+}
+QPushButton:disabled {
+    background: #b0bec5;
+}
+
+/* 输入控件 */
+QLineEdit, QComboBox, QSpinBox, QTextEdit {
+    border: 1px solid #c8ced4;
+    border-radius: 3px;
+    padding: 4px 6px;
+    background: #ffffff;
+}
+QLineEdit:focus, QComboBox:focus, QSpinBox:focus, QTextEdit:focus {
+    border-color: #3498db;
+}
+
+/* 表格 */
+QTableView, QTableWidget {
+    background: #ffffff;
+    alternate-background-color: #f7f9fb;
+    gridline-color: #e4e8ec;
+    border: 1px solid #d5dade;
+    selection-background-color: #d6eaf8;
+    selection-color: #000000;
+}
+QHeaderView::section {
+    background: #ecf0f1;
+    padding: 6px;
+    border: none;
+    border-right: 1px solid #d5dade;
+    border-bottom: 1px solid #c8ced4;
+    font-weight: bold;
+}
+
+/* 标签页 */
+QTabWidget::pane {
+    border: 1px solid #d5dade;
+    background: #ffffff;
+}
+QTabBar::tab {
+    padding: 7px 18px;
+    background: #ecf0f1;
+    border: 1px solid #d5dade;
+    border-bottom: none;
+}
+QTabBar::tab:selected {
+    background: #ffffff;
+    font-weight: bold;
+}
+
+/* 状态栏 */
+QStatusBar {
+    background: #ecf0f1;
+    border-top: 1px solid #d5dade;
+}
